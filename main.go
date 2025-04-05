@@ -1,20 +1,23 @@
 package main
 
 import (
-	"fmt"
-	"log"
+	//go:generate go tool oapi-codegen -config ./api/openapi/oapi-codegen-config.yaml ./api/openapi/api-spec.yaml
 	"net/http"
 
-	"github.com/julienschmidt/httprouter"
+	"github.com/gin-gonic/gin"
 )
 
-func Hello(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprint(w, "Hello World!\n")
+type hello struct {
+	message string
+}
+
+func Hello(c *gin.Context) {
+	c.JSON(http.StatusOK, hello{message: "Hello World!"})
 }
 
 func main() {
-	router := httprouter.New()
+	router := gin.Default()
 	router.GET("/hello", Hello)
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	router.Run()
 }
