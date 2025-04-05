@@ -1,23 +1,28 @@
 package main
 
 import (
-	//go:generate go tool oapi-codegen -config ./api/openapi/oapi-codegen-config.yaml ./api/openapi/api-spec.yaml
+	"go-api-calc/api"
+	calc_handlers "go-api-calc/internal/handlers"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type hello struct {
-	message string
+	Message string
 }
 
 func Hello(c *gin.Context) {
-	c.JSON(http.StatusOK, hello{message: "Hello World!"})
+	c.JSON(http.StatusOK, hello{Message: "Hello World"})
 }
 
 func main() {
+	calcServer := calc_handlers.NewCalcServer()
+
 	router := gin.Default()
 	router.GET("/hello", Hello)
+
+	api.RegisterHandlers(router, calcServer)
 
 	router.Run()
 }

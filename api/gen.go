@@ -7,65 +7,63 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// PostAddJSONBody defines parameters for PostAdd.
-type PostAddJSONBody struct {
-	Number1 *int `json:"number1,omitempty"`
-	Number2 *int `json:"number2,omitempty"`
+// CalculationRequestNumbers defines model for CalculationRequestNumbers.
+type CalculationRequestNumbers struct {
+	Number1 int `json:"number1"`
+	Number2 int `json:"number2"`
 }
 
-// PostDivideJSONBody defines parameters for PostDivide.
-type PostDivideJSONBody struct {
-	Dividend *int `json:"dividend,omitempty"`
-	Divisor  *int `json:"divisor,omitempty"`
+// DivisionRequest defines model for DivisionRequest.
+type DivisionRequest struct {
+	Dividend int `json:"dividend"`
+	Divisor  int `json:"divisor"`
 }
 
-// PostMultiplyJSONBody defines parameters for PostMultiply.
-type PostMultiplyJSONBody struct {
-	Number1 *int `json:"number1,omitempty"`
-	Number2 *int `json:"number2,omitempty"`
+// Error defines model for Error.
+type Error struct {
+	Message string `json:"message"`
 }
 
-// PostSubtractJSONBody defines parameters for PostSubtract.
-type PostSubtractJSONBody struct {
-	Number1 *int `json:"number1,omitempty"`
-	Number2 *int `json:"number2,omitempty"`
+// Result defines model for Result.
+type Result struct {
+	Result int `json:"result"`
 }
 
-// PostSumJSONBody defines parameters for PostSum.
-type PostSumJSONBody = []int
+// SumRequest An array of numbers to sum
+type SumRequest = []int
 
-// PostAddJSONRequestBody defines body for PostAdd for application/json ContentType.
-type PostAddJSONRequestBody PostAddJSONBody
+// AddNumbersJSONRequestBody defines body for AddNumbers for application/json ContentType.
+type AddNumbersJSONRequestBody = CalculationRequestNumbers
 
-// PostDivideJSONRequestBody defines body for PostDivide for application/json ContentType.
-type PostDivideJSONRequestBody PostDivideJSONBody
+// DivideNumbersJSONRequestBody defines body for DivideNumbers for application/json ContentType.
+type DivideNumbersJSONRequestBody = DivisionRequest
 
-// PostMultiplyJSONRequestBody defines body for PostMultiply for application/json ContentType.
-type PostMultiplyJSONRequestBody PostMultiplyJSONBody
+// MultiplyNumbersJSONRequestBody defines body for MultiplyNumbers for application/json ContentType.
+type MultiplyNumbersJSONRequestBody = CalculationRequestNumbers
 
-// PostSubtractJSONRequestBody defines body for PostSubtract for application/json ContentType.
-type PostSubtractJSONRequestBody PostSubtractJSONBody
+// SubtractNumbersJSONRequestBody defines body for SubtractNumbers for application/json ContentType.
+type SubtractNumbersJSONRequestBody = CalculationRequestNumbers
 
-// PostSumJSONRequestBody defines body for PostSum for application/json ContentType.
-type PostSumJSONRequestBody = PostSumJSONBody
+// SumNumbersJSONRequestBody defines body for SumNumbers for application/json ContentType.
+type SumNumbersJSONRequestBody = SumRequest
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 	// Add two numbers
 	// (POST /add)
-	PostAdd(c *gin.Context)
+	AddNumbers(c *gin.Context)
 	// Divide two numbers
 	// (POST /divide)
-	PostDivide(c *gin.Context)
+	DivideNumbers(c *gin.Context)
 	// Multiply two numbers
 	// (POST /multiply)
-	PostMultiply(c *gin.Context)
+	MultiplyNumbers(c *gin.Context)
 	// Subtract two numbers
 	// (POST /subtract)
-	PostSubtract(c *gin.Context)
+	SubtractNumbers(c *gin.Context)
 	// Add all numbers in an array
 	// (POST /sum)
-	PostSum(c *gin.Context)
+	SumNumbers(c *gin.Context)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -77,8 +75,8 @@ type ServerInterfaceWrapper struct {
 
 type MiddlewareFunc func(c *gin.Context)
 
-// PostAdd operation middleware
-func (siw *ServerInterfaceWrapper) PostAdd(c *gin.Context) {
+// AddNumbers operation middleware
+func (siw *ServerInterfaceWrapper) AddNumbers(c *gin.Context) {
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -87,11 +85,11 @@ func (siw *ServerInterfaceWrapper) PostAdd(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.PostAdd(c)
+	siw.Handler.AddNumbers(c)
 }
 
-// PostDivide operation middleware
-func (siw *ServerInterfaceWrapper) PostDivide(c *gin.Context) {
+// DivideNumbers operation middleware
+func (siw *ServerInterfaceWrapper) DivideNumbers(c *gin.Context) {
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -100,11 +98,11 @@ func (siw *ServerInterfaceWrapper) PostDivide(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.PostDivide(c)
+	siw.Handler.DivideNumbers(c)
 }
 
-// PostMultiply operation middleware
-func (siw *ServerInterfaceWrapper) PostMultiply(c *gin.Context) {
+// MultiplyNumbers operation middleware
+func (siw *ServerInterfaceWrapper) MultiplyNumbers(c *gin.Context) {
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -113,11 +111,11 @@ func (siw *ServerInterfaceWrapper) PostMultiply(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.PostMultiply(c)
+	siw.Handler.MultiplyNumbers(c)
 }
 
-// PostSubtract operation middleware
-func (siw *ServerInterfaceWrapper) PostSubtract(c *gin.Context) {
+// SubtractNumbers operation middleware
+func (siw *ServerInterfaceWrapper) SubtractNumbers(c *gin.Context) {
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -126,11 +124,11 @@ func (siw *ServerInterfaceWrapper) PostSubtract(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.PostSubtract(c)
+	siw.Handler.SubtractNumbers(c)
 }
 
-// PostSum operation middleware
-func (siw *ServerInterfaceWrapper) PostSum(c *gin.Context) {
+// SumNumbers operation middleware
+func (siw *ServerInterfaceWrapper) SumNumbers(c *gin.Context) {
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -139,7 +137,7 @@ func (siw *ServerInterfaceWrapper) PostSum(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.PostSum(c)
+	siw.Handler.SumNumbers(c)
 }
 
 // GinServerOptions provides options for the Gin server.
@@ -169,9 +167,9 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 		ErrorHandler:       errorHandler,
 	}
 
-	router.POST(options.BaseURL+"/add", wrapper.PostAdd)
-	router.POST(options.BaseURL+"/divide", wrapper.PostDivide)
-	router.POST(options.BaseURL+"/multiply", wrapper.PostMultiply)
-	router.POST(options.BaseURL+"/subtract", wrapper.PostSubtract)
-	router.POST(options.BaseURL+"/sum", wrapper.PostSum)
+	router.POST(options.BaseURL+"/add", wrapper.AddNumbers)
+	router.POST(options.BaseURL+"/divide", wrapper.DivideNumbers)
+	router.POST(options.BaseURL+"/multiply", wrapper.MultiplyNumbers)
+	router.POST(options.BaseURL+"/subtract", wrapper.SubtractNumbers)
+	router.POST(options.BaseURL+"/sum", wrapper.SumNumbers)
 }

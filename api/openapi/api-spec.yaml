@@ -8,119 +8,152 @@ paths:
   /add:
     post:
       summary: Add two numbers
+      operationId: addNumbers # Added operationId for better generated names
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                number1:
-                  type: integer
-                number2:
-                  type: integer
+              $ref: '#/components/schemas/CalculationRequestNumbers' # Reference named schema
       responses:
         "200":
           description: Successfully added two numbers
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  result:
-                    type: integer
+                $ref: '#/components/schemas/Result' # Reference named schema
   /subtract:
     post:
       summary: Subtract two numbers
+      operationId: subtractNumbers # Added operationId
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                number1:
-                  type: integer
-                number2:
-                  type: integer
+              $ref: '#/components/schemas/CalculationRequestNumbers' # Reference named schema
       responses:
         "200":
           description: Successfully subtracted two numbers
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  result:
-                    type: integer
+                $ref: '#/components/schemas/Result' # Reference named schema
   /multiply:
     post:
       summary: Multiply two numbers
+      operationId: multiplyNumbers # Added operationId
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                number1:
-                  type: integer
-                number2:
-                  type: integer
+              $ref: '#/components/schemas/CalculationRequestNumbers' # Reference named schema
       responses:
         "200":
           description: Successfully multiplied two numbers
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  result:
-                    type: integer
+                $ref: '#/components/schemas/Result' # Reference named schema
   /divide:
     post:
       summary: Divide two numbers
+      operationId: divideNumbers # Added operationId
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                dividend:
-                  type: integer
-                divisor:
-                  type: integer
+              $ref: '#/components/schemas/DivisionRequest' # Use specific schema for division
       responses:
         "200":
           description: Successfully divided two numbers
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  result:
-                    type: integer
+                $ref: '#/components/schemas/Result' # Reference named schema
+        # Consider adding a 400 response for division by zero
+        "400":
+          description: Invalid input (e.g., division by zero)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' # Reference error schema
 
   /sum:
     post:
       summary: Add all numbers in an array
+      operationId: sumNumbers # Added operationId
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: array
-              items:
-                type: integer
-
+              $ref: '#/components/schemas/SumRequest' # Reference named schema
       responses:
         "200":
-          description: Successfully divided two numbers
+          description: Successfully summed the numbers # Corrected description
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  result:
-                    type: integer
+                $ref: '#/components/schemas/Result' # Reference named schema
+
+# --- Define reusable components here ---
+components:
+  schemas:
+    # Schema for requests needing number1 and number2
+    CalculationRequestNumbers:
+      type: object
+      required:
+        - number1
+        - number2
+      properties:
+        number1:
+          type: integer
+          example: 10
+        number2:
+          type: integer
+          example: 5
+
+    # Specific schema for division request
+    DivisionRequest:
+      type: object
+      required:
+        - dividend
+        - divisor
+      properties:
+        dividend:
+          type: integer
+          example: 10
+        divisor:
+          type: integer
+          example: 2 # Add validation like minimum: 1 if needed
+
+    # Specific schema for sum request
+    SumRequest:
+      description: An array of numbers to sum
+      type: array
+      items:
+        type: integer
+      example: [1, 2, 3, 4, 5]
+
+    # The standard result schema
+    Result:
+      type: object
+      required:
+        - result
+      properties:
+        result:
+          type: integer
+          example: 15
+
+    # A generic error response schema
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: "Division by zero is not allowed."
